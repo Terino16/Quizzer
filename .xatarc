@@ -1,0 +1,6 @@
+{
+  "databaseURL": "https://Anubhav-Dube-s-workspace-5dlu7c.eu-central-1.xata.sh/db/Quizzer",
+  "codegen": {
+    "output": "app/xata.ts"
+  }
+}
