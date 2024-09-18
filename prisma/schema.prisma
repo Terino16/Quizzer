@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  quizzes       Score[]  // Relationship to Score (stores quizzes with user scores)
+  accounts      Account[]
+  sessions      Session[]
+}
+
+model Quiz {
+  id          String     @id @default(cuid())
+  questions   Question[]
+  topic       String      // Quiz topic
+  scores      Score[]     // New relation to the Score model
+  description String
+  image      String?
+  noq        Int
+  duration   String
+  @@index([id])
+}
+
+model Question {
+  id                String   @id @default(cuid())
+  question          String
+  answer            String
+  quizId            String
+  options           Json?    // for MCQ questions
+  isCorrect         Boolean? // for MCQ questions
+  userAnswer        String?
+  quiz              Quiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  @@index([quizId])
+}
+
+model Score {
+  id          String   @id @default(cuid())
+  userId      String
+  quizId      String
+  score       Int
+  timeStarted DateTime
+  timeEnded   DateTime?
+
+  user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quiz        Quiz   @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  @@index([userId, quizId]) // Index to speed up lookup by user and quiz
+}
+
+model topic_count {
+  id    String @id @default(cuid())
+  topic String @unique
+  count Int
+}
