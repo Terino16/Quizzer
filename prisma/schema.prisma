@@ -56,7 +56,6 @@ model Quiz {
   image      String?
   noq        Int
   duration   String
-  @@index([id])
 }
 
 model Question {
@@ -83,8 +82,9 @@ model Score {
   user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   quiz        Quiz   @relation(fields: [quizId], references: [id], onDelete: Cascade)
 
-  @@index([userId, quizId]) // Index to speed up lookup by user and quiz
+  @@index([userId, quizId]) 
 }
+
 
 model topic_count {
   id    String @id @default(cuid())

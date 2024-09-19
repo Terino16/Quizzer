@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import {
   Card,
@@ -6,37 +7,27 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import Link from "next/link";
-import { getAuthSession } from "@/lib/nextauth";
-import { redirect } from "next/navigation";
-//import HistoryComponent from "../HistoryComponent";
-// import { prisma } from "@/lib/db";
 
+import { useRouter } from "next/navigation";
 
-const RecentActivityCard = async () => {
-  const session = await getAuthSession();
-  if (!session?.user) {
-    return redirect("/");
-  }
-//   const games_count = await prisma.game.count({
-//     where: {
-//       userId: session.user.id,
-//     },
-//   });
+const RecentActivityCard =() => {
+  const router = useRouter();
   return (
-    <Card className="col-span-4 lg:col-span-3">
+    <Card className="col-span-4 lg:col-span-3" onClick={() => {
+      router.push("/recent");
+    }}>
       <CardHeader>
         <CardTitle className="text-2xl font-bold">
-          <Link href="/history">Recent Activity</Link>
+          Recent Activity
         </CardTitle>
         <CardDescription>
-          {/* You have played a total of {games_count} quizzes. */}
+        Get a quick overview of your recent activity.
         </CardDescription>
       </CardHeader>
       <CardContent className="max-h-[580px] overflow-scroll">
-        {/* <HistoryComponent limit={10} userId={session.user.id} /> */}
       </CardContent>
     </Card>
+  
   );
 };
 
