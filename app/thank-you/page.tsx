@@ -1,11 +1,10 @@
-import React from 'react'
 
-
-
-function page() {
+export default function ThankYouPage() {
   return (
-    <div>page</div>
-  )
+    <div className=" flex flex-col justify-center items-center">
+     
+  <h1 className="text-3xl font-bold">Thank You</h1> 
+  
+    </div>
+  );
 }
-
-export default page

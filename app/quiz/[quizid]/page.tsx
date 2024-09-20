@@ -25,7 +25,7 @@ const QuizDetail = async ({ params }: { params: { quizid: string } }) => {
   }
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
-      <QuizPage questions={questions} />
+      <QuizPage questions={questions} quizId={params.quizid} />
     </div>
   );
 };

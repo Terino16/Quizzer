@@ -1,7 +1,7 @@
 // app/quizzes/page.tsx
 
 import React from "react";
-import UserQuizzes from "@/components/Recent/UserQuizzes";
+import UserQuizzes from "@/components/History/UserQuizzes";
 import { getAuthSession } from "@/lib/nextauth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";

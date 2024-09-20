@@ -12,14 +12,17 @@ import {
 import { Button } from "@/components/ui/button";
 import axios from "axios"; // For API calls to store score
 import { useToast } from "@/hooks/use-toast";
+import { JsonValue } from "@prisma/client/runtime/library";
+import CountdownTimer from "../countDown"; // Import the CountdownTimer component
 
 type Questions = {
   id: string;
   question: string;
-  options: string[] | null;
+  answer: string;
   quizId: string;
-  answer: string; // Correct answer
-  userAnswer?: string | null;
+  options: JsonValue | null;
+  isCorrect: boolean | null;
+  userAnswer: string | null;
 };
 
 type Props = {
@@ -33,14 +36,20 @@ const QuizPage = ({ questions, quizId }: Props) => {
   const [score, setScore] = useState(0);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [timeStarted, setTimeStarted] = useState<Date | null>(null);
+  const [targetTime, setTargetTime] = useState<string>(""); // Target time for countdown
   const router = useRouter();
-  const {toast} = useToast();
+  const { toast } = useToast();
 
   const question = questions ? questions[currentIndex] : null;
 
   useEffect(() => {
     // Record the start time when the component mounts
-    setTimeStarted(new Date());
+    const startTime = new Date();
+    setTimeStarted(startTime);
+
+    // Set target time to 2 hours from now
+    const targetTime = new Date(startTime.getTime() + 1000*60); // 2 hours from current time
+    setTargetTime(targetTime.toISOString()); // Set target time in ISO string format for CountdownTimer
   }, []);
 
   const handleNext = () => {
@@ -77,15 +86,13 @@ const QuizPage = ({ questions, quizId }: Props) => {
       await axios.post("/api/submit-quiz", {
         quizId,
         score,
-        timeStarted, // Pass the start time
+        timeStarted, 
       });
 
       toast({
         title: "Quiz Submitted",
         description: `You scored ${score} points!`,
       });
-
-      // Redirect to the Thank You page after quiz submission
       router.push("/thank-you");
     } catch (error) {
       console.error("Error submitting quiz:", error);
@@ -96,26 +103,36 @@ const QuizPage = ({ questions, quizId }: Props) => {
     }
   };
 
-  if (!question) return <div>No Questions Available</div>;
+  if (!questions || questions.length === 0) {
+    return <div>No Questions Available</div>;
+  }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
-      <Card className="w-full max-w-3xl p-4">
+      <div className="">
+      {targetTime && <CountdownTimer targetDate={targetTime} />}
+      </div>
+       
+      <Card className="w-full max-w-3xl p-4 border-none">
         <CardHeader>
           <CardTitle>{`Question ${currentIndex + 1}`}</CardTitle>
-          <CardDescription>{question.question}</CardDescription>
+          <CardDescription>{question?.question}</CardDescription>
         </CardHeader>
 
         <CardContent>
-          {question.options?.map((option, idx) => (
+          {/* Countdown Timer */}
+        
+
+          {/* Question Options */}
+          {Array.isArray(question?.options) && question?.options.map((option, idx) => (
             <div
               key={idx}
               className={`p-2 border rounded-md cursor-pointer my-2 ${
                 userAnswers[currentIndex] === option ? "bg-blue-200" : ""
               }`}
-              onClick={() => handleAnswerSelection(option)}
+              onClick={() => typeof option === 'string' && handleAnswerSelection(option)}
             >
-              {option}
+              {option?.toString()}
             </div>
           ))}
 

@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { NextResponse } from "next/server";
 import { getAuthSession } from "@/lib/nextauth";
 
+// This is the endpoint for submitting the quiz score
 export async function POST(request: Request) {
   const body = await request.json();
   const { quizId, score, timeStarted } = body; // Expect timeStarted to be passed in body
@@ -14,18 +15,18 @@ export async function POST(request: Request) {
     return NextResponse.redirect("/");
   }
 
+  const userId= session.user.id;
+
   try {
-    // Store the score, time started, and time ended in the database
     await prisma.score.create({
       data: {
         quizId,
-        userId: session.user.id, // User ID from the session
         score,
-        timeStarted: new Date(timeStarted), // Converting the timeStarted to Date object
-        timeEnded: new Date(), // Set timeEnded to current time
+        timeStarted: new Date(timeStarted),
+        timeEnded: new Date(),
+        userId: userId
       },
     });
-
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Error saving quiz score:", error);
