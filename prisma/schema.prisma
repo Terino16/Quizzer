@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+   binaryTargets = ["native", "linux-musl"]
 }
 
 datasource db {
@@ -64,8 +65,6 @@ model Question {
   answer            String
   quizId            String
   options           Json?    // for MCQ questions
-  isCorrect         Boolean? // for MCQ questions
-  userAnswer        String?
   quiz              Quiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
 
   @@index([quizId])

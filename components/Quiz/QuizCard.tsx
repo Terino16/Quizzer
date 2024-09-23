@@ -23,7 +23,7 @@ type quiztype = {
   id: string;
   topic: string;
   description: string;
-  image: string;
+  image: string | null;
   noq: number;
   duration: string;
 };
@@ -34,7 +34,8 @@ type Props = {
 
 const QuizCard = ({ quiz }: Props) => {
   return (
-    <div className="p-8 mx-auto max-w-7xl">
+    <div className="h-screen p-8 pt-28  bg-white [background:radial-gradient(125%_125%_at_50%_10%,#fff_40%,#63e_100%)]  
+    dark:[background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]">           
       <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
         {quiz.map((quiz) => (
           <Dialog key={quiz.id}>
@@ -42,7 +43,7 @@ const QuizCard = ({ quiz }: Props) => {
               <Card className="col-span-1 rounded-md cursor-pointer">
                 {/* Quiz Image */}
                 <img
-                  src={quiz.image}
+                  src={quiz.image ?? "/default-image.png"}
                   alt={quiz.topic}
                   className="w-full h-40 object-cover rounded-t-md"
                 />

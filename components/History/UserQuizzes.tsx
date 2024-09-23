@@ -1,12 +1,7 @@
 "use client";
 
 import React from "react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { UserScoreDonutChart } from "./UserScoreDonutChart";
 import { format, differenceInSeconds } from "date-fns"; // Import date-fns for consistent formatting and duration calculation
 
@@ -38,9 +33,12 @@ const UserQuizzes = ({ recent }: Props) => {
   }
 
   return (
-    <div className="p-8 mx-auto max-w-7xl">
+    <div
+      className="min-h-screen p-8 pt-28  bg-white [background:radial-gradient(125%_125%_at_50%_10%,#fff_40%,#63e_100%)]  
+    dark:[background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]"
+    >
       <h1 className="text-3xl font-bold mb-6">Your Completed Quizzes</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {recent.map((quiz) => {
           // Calculate duration
           let duration = null;
@@ -56,18 +54,25 @@ const UserQuizzes = ({ recent }: Props) => {
 
           return (
             <Card key={quiz.id} className="col-span-1 rounded-md">
-              <UserScoreDonutChart score={quiz.score} totalQuestions={quiz.quiz.noq} />
+              <UserScoreDonutChart
+                score={quiz.score}
+                totalQuestions={quiz.quiz.noq}
+              />
               <CardHeader className="text-center">
-                <CardTitle className="text-[18px]">{quiz.quiz.topic}</CardTitle>
+                <CardTitle className=" text-sm md:text-[18px]">
+                  {quiz.quiz.topic}
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 {/* Format date as 'Date, Day, Month, Year' */}
                 <p>
-                  Date: {format(new Date(quiz.timeStarted), "EEEE, do MMMM yyyy")}
+                  Date:{" "}
+                  {format(new Date(quiz.timeStarted), "EEEE, do MMMM yyyy")}
                 </p>
                 <p>
-    Starting Time: {format(new Date(quiz.timeStarted), "HH:mm:ss")}
-  </p>
+                  Starting Time:{" "}
+                  {format(new Date(quiz.timeStarted), "HH:mm:ss")}
+                </p>
 
                 {/* Display duration if available */}
                 {duration && <p>Duration: {duration}</p>}

@@ -13,7 +13,6 @@ import { Button } from "@/components/ui/button";
 import axios from "axios"; // For API calls to store score
 import { useToast } from "@/hooks/use-toast";
 import { JsonValue } from "@prisma/client/runtime/library";
-import CountdownTimer from "../countDown"; // Import the CountdownTimer component
 
 type Questions = {
   id: string;
@@ -21,8 +20,6 @@ type Questions = {
   answer: string;
   quizId: string;
   options: JsonValue | null;
-  isCorrect: boolean | null;
-  userAnswer: string | null;
 };
 
 type Props = {
@@ -36,7 +33,6 @@ const QuizPage = ({ questions, quizId }: Props) => {
   const [score, setScore] = useState(0);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [timeStarted, setTimeStarted] = useState<Date | null>(null);
-  const [targetTime, setTargetTime] = useState<string>(""); // Target time for countdown
   const router = useRouter();
   const { toast } = useToast();
 
@@ -47,9 +43,6 @@ const QuizPage = ({ questions, quizId }: Props) => {
     const startTime = new Date();
     setTimeStarted(startTime);
 
-    // Set target time to 2 hours from now
-    const targetTime = new Date(startTime.getTime() + 1000*60); // 2 hours from current time
-    setTargetTime(targetTime.toISOString()); // Set target time in ISO string format for CountdownTimer
   }, []);
 
   const handleNext = () => {
@@ -109,10 +102,7 @@ const QuizPage = ({ questions, quizId }: Props) => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
-      <div className="">
-      {targetTime && <CountdownTimer targetDate={targetTime} />}
-      </div>
-       
+ 
       <Card className="w-full max-w-3xl p-4 border-none">
         <CardHeader>
           <CardTitle>{`Question ${currentIndex + 1}`}</CardTitle>

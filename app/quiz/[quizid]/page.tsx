@@ -24,7 +24,7 @@ const QuizDetail = async ({ params }: { params: { quizid: string } }) => {
     return <div>No questions available for this quiz.</div>;
   }
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
+    <div className="flex flex-col w-full items-center justify-center min-h-screen bg-white dark:bg-gray-950">
       <QuizPage questions={questions} quizId={params.quizid} />
     </div>
   );

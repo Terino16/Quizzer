@@ -31,7 +31,7 @@ export default function RootLayout({
     <html lang="en">
      
       <body
-        className={cn(geistMono, geistSans, "antialiased min-h-screen pt-16")}
+        className={cn(geistMono, geistSans,)}
       >
          <Providers>
         <Navbar/>
