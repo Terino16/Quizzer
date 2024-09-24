@@ -1,5 +1,4 @@
 import HistoryCard from '@/components/dashboard/HistoryCard'
-import HotTopicsCard from '@/components/dashboard/HotTopicsCard'
 import Quizmecard from '@/components/dashboard/Quizmecard'
 import { getAuthSession } from '@/lib/nextauth'
 import { redirect } from 'next/navigation'
