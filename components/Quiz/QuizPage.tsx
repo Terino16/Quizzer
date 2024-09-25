@@ -32,6 +32,8 @@ const QuizPage = ({ questions, quizId }: Props) => {
   const [userAnswers, setUserAnswers] = useState<string[]>([]);
   const [score, setScore] = useState(0);
   const [feedback, setFeedback] = useState<string | null>(null);
+  const [correctAnswer, setCorrectAnswer] = useState<string | null>(null); // Track the correct answer
+  const [hasSubmittedAnswer, setHasSubmittedAnswer] = useState(false); // Prevent re-answering after submission
   const [timeStarted, setTimeStarted] = useState<Date | null>(null);
   const router = useRouter();
   const { toast } = useToast();
@@ -42,11 +44,12 @@ const QuizPage = ({ questions, quizId }: Props) => {
     // Record the start time when the component mounts
     const startTime = new Date();
     setTimeStarted(startTime);
-
   }, []);
 
   const handleNext = () => {
     setFeedback(null);
+    setCorrectAnswer(null); // Reset the correct answer
+    setHasSubmittedAnswer(false); // Allow answering the next question
     if (currentIndex < (questions?.length || 0) - 1) {
       setCurrentIndex(currentIndex + 1);
     }
@@ -54,22 +57,30 @@ const QuizPage = ({ questions, quizId }: Props) => {
 
   const handlePrevious = () => {
     setFeedback(null);
+    setCorrectAnswer(null); // Reset the correct answer
+    setHasSubmittedAnswer(false); // Allow answering the previous question
     if (currentIndex > 0) {
       setCurrentIndex(currentIndex - 1);
     }
   };
 
   const handleAnswerSelection = (answer: string) => {
-    const updatedAnswers = [...userAnswers];
-    updatedAnswers[currentIndex] = answer;
-    setUserAnswers(updatedAnswers);
+    if (!hasSubmittedAnswer) {
+      const updatedAnswers = [...userAnswers];
+      updatedAnswers[currentIndex] = answer;
+      setUserAnswers(updatedAnswers);
 
-    // Check if the answer is correct and update score
-    if (answer === question?.answer) {
-      setScore((prevScore) => prevScore + 1);
-      setFeedback("Correct!");
-    } else {
-      setFeedback("Incorrect!");
+      // Check if the answer is correct and update score
+      if (answer === question?.answer) {
+        setScore((prevScore) => prevScore + 1);
+        setFeedback("Correct!");
+      } else {
+        setFeedback("Incorrect!");
+      }
+
+      // Set the correct answer
+      setCorrectAnswer(question?.answer || "");
+      setHasSubmittedAnswer(true); // Prevent further answering for the current question
     }
   };
 
@@ -79,7 +90,7 @@ const QuizPage = ({ questions, quizId }: Props) => {
       await axios.post("/api/submit-quiz", {
         quizId,
         score,
-        timeStarted, 
+        timeStarted,
       });
 
       toast({
@@ -102,7 +113,6 @@ const QuizPage = ({ questions, quizId }: Props) => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
- 
       <Card className="w-full max-w-3xl p-4 border-none">
         <CardHeader>
           <CardTitle>{`Question ${currentIndex + 1}`}</CardTitle>
@@ -110,26 +120,37 @@ const QuizPage = ({ questions, quizId }: Props) => {
         </CardHeader>
 
         <CardContent>
-          {/* Countdown Timer */}
-        
-
-          {/* Question Options */}
-          {Array.isArray(question?.options) && question?.options.map((option, idx) => (
-            <div
-              key={idx}
-              className={`p-2 border rounded-md cursor-pointer my-2 ${
-                userAnswers[currentIndex] === option ? "bg-blue-200" : ""
-              }`}
-              onClick={() => typeof option === 'string' && handleAnswerSelection(option)}
-            >
-              {option?.toString()}
-            </div>
-          ))}
+          {Array.isArray(question?.options) &&
+            question?.options.map((option, idx) => (
+              <div
+                key={idx}
+                className={`p-2 border rounded-md cursor-pointer my-2 ${
+                  userAnswers[currentIndex] === option ? "bg-blue-200" : ""
+                }`}
+                onClick={() =>
+                  typeof option === "string" && handleAnswerSelection(option)
+                }
+              >
+                {option?.toString()}
+              </div>
+            ))}
 
           {/* Feedback Message */}
           {feedback && (
-            <div className={`mt-4 text-lg font-semibold ${feedback === "Correct!" ? "text-green-600" : "text-red-600"}`}>
+            <div
+              className={`mt-4 text-lg font-semibold ${
+                feedback === "Correct!" ? "text-green-600" : "text-red-600"
+              }`}
+            >
               {feedback}
+            </div>
+          )}
+
+          {/* Display Correct Answer after submission */}
+          {correctAnswer && (
+            <div className="mt-2 text-md text-gray-500">
+              The correct answer is:{" "}
+              <span className="font-bold text-black dark:text-white">{correctAnswer}</span>
             </div>
           )}
 
@@ -142,7 +163,7 @@ const QuizPage = ({ questions, quizId }: Props) => {
                 Submit Quiz
               </Button>
             ) : (
-              <Button onClick={handleNext}>
+              <Button onClick={handleNext} disabled={!hasSubmittedAnswer}>
                 Next
               </Button>
             )}

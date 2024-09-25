@@ -9,7 +9,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
-import { Timer } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -59,7 +58,7 @@ const QuizCard = ({ quiz }: Props) => {
                 <CardContent>
                   {quiz.noq} Questions
                   <span className="float-right flex items-center">
-                    <Timer className="mr-1" />
+                   
                     Time: {quiz.duration} min
                   </span>
                 </CardContent>

@@ -6,12 +6,9 @@ export default function ThankYouPage() {
   const router = useRouter();
 
   useEffect(() => {
-    // Redirect to the home page after 3 seconds
     const timeout = setTimeout(() => {
       router.push('/');
     }, 3000);
-
-    // Clean up the timeout when the component unmounts
     return () => clearTimeout(timeout);
   }, [router]);
   return (

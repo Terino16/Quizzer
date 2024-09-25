@@ -65,8 +65,7 @@ model Question {
   answer            String
   quizId            String
   options           Json?    // for MCQ questions
-  quiz              Quiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
-
+  quiz              Quiz @relation (fields: [quizId], references: [id], onDelete: Cascade)
   @@index([quizId])
 }
 
