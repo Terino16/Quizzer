@@ -22,7 +22,7 @@ const Dashboard = async () => {
   return (
     <div className="h-screen p-8  pt-28  bg-white [background:radial-gradient(125%_125%_at_50%_10%,#fff_40%,#63e_100%)]  dark:[background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]">
         <div className='flex items-center'>
-        <h1 className='text-3xl font-bold tracking-tight'>Dashboard</h1>
+        <h1 className='text-3xl font-heading tracking-tight'>Dashboard</h1>
         </div>
        
         <div className='grid gap-4 mt-4 md:grid-cols-2 '>
