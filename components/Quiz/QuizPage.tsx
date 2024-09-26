@@ -55,14 +55,7 @@ const QuizPage = ({ questions, quizId }: Props) => {
     }
   };
 
-  const handlePrevious = () => {
-    setFeedback(null);
-    setCorrectAnswer(null); // Reset the correct answer
-    setHasSubmittedAnswer(false); // Allow answering the previous question
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
-    }
-  };
+
 
   const handleAnswerSelection = (answer: string) => {
     if (!hasSubmittedAnswer) {
@@ -167,9 +160,6 @@ const QuizPage = ({ questions, quizId }: Props) => {
           )}
 
           <div className="flex justify-between mt-4">
-            <Button onClick={handlePrevious} disabled={currentIndex === 0}>
-              Previous
-            </Button>
             {currentIndex === (questions?.length || 0) - 1 ? (
               <Button onClick={handleSubmit} className="bg-green-500">
                 Submit Quiz

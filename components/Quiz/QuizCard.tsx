@@ -33,9 +33,8 @@ type Props = {
 
 const QuizCard = ({ quiz }: Props) => {
   return (
-    <div className="h-screen p-8 pt-28  bg-white [background:radial-gradient(125%_125%_at_50%_10%,#fff_40%,#63e_100%)]  
-    dark:[background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]">           
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+    <div className="h-screen p-8 pt-28  ">           
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
         {quiz.map((quiz) => (
           <Dialog key={quiz.id}>
             <DialogTrigger asChild>
@@ -48,14 +47,14 @@ const QuizCard = ({ quiz }: Props) => {
                 />
                 {/* Quiz Header */}
                 <CardHeader>
-                  <CardTitle className="text-2xl font-bold">
+                  <CardTitle className="text-xl md:text-2xl font-bold">
                     {quiz.topic}
                   </CardTitle>
-                  <CardDescription>{quiz.description}</CardDescription>
+                  <CardDescription >{quiz.description}</CardDescription>
                 </CardHeader>
 
                 {/* Quiz Content */}
-                <CardContent>
+                <CardContent className="">
                   {quiz.noq} Questions
                   <span className="float-right flex items-center">
                    

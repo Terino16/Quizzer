@@ -9,7 +9,7 @@ export default async function Home() {
   return (
     <div className="flex flex-col items-center text-center min-h-screen pt-28 px-5 bg-white [background:radial-gradient(125%_125%_at_50%_10%,#fff_40%,#63e_100%)] dark:[background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]">
       <div className="flex items-center justify-center p-4 md:px-8  gap-1 text-4xl md:text-7xl">
-        <p className=" font-heading text-3xl sm:text-5xl md:text-6xl lg:text-7xl">
+        <p className=" font-heading text-3xl md:text-6xl lg:text-7xl">
           Welcome to{" "}
         </p>
         <p className="  font-bold text-neutral-400 drop-shadow-xl shadow-white">
