@@ -1,49 +1,29 @@
-# Stage 1: Install dependencies
-FROM node:18-alpine AS deps
+# Step 1: Use Node.js base image
+FROM node:18.18.0-alpine
 
+# Step 2: Set the working directory inside the container
 WORKDIR /app
 
-# Install dependencies based on the package.json and package-lock.json
-COPY package.json package-lock.json ./
+# Step 3: Copy the package.json and package-lock.json
+COPY package*.json ./
 
-RUN npm install --frozen-lockfile
+# Step 4: Install the dependencies
+RUN npm install
 
-# Copy over the Prisma schema if needed for Prisma migration or generation
-COPY prisma ./prisma/
-
-# Stage 2: Build the application
-FROM node:18-alpine AS builder
-
-WORKDIR /app
-
-# Copy the files needed for building the app
+# Step 5: Copy the rest of the application files to the container
 COPY . .
 
-# Install dependencies again to ensure that build time dependencies are also installed
-COPY --from=deps /app/node_modules ./node_modules
+# Step 6: Generate Prisma Client
+RUN npx prisma generate
 
-# Build the application
+# Step 7: Build the Next.js application
 RUN npm run build
 
-# Stage 3: Production image
-FROM node:18-alpine AS runner
-
-WORKDIR /app
-
-# Install only production dependencies
-COPY package.json package-lock.json ./
-RUN npm install --production --frozen-lockfile
-
-# Copy necessary build files from builder
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/public ./public
-
-# Expose the port Next.js will run on
+# Step 8: Expose the Next.js port (3000 by default)
 EXPOSE 3000
 
-# Set environment variable for production
-ENV NODE_ENV production
+# Step 9: Set the environment variable for Prisma to use production mode
+ENV NODE_ENV=production
 
-# Start the Next.js application
+# Step 10: Start the Next.js application
 CMD ["npm", "run", "start"]

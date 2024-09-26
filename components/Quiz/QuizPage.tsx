@@ -67,22 +67,34 @@ const QuizPage = ({ questions, quizId }: Props) => {
   const handleAnswerSelection = (answer: string) => {
     if (!hasSubmittedAnswer) {
       const updatedAnswers = [...userAnswers];
-      updatedAnswers[currentIndex] = answer;
+      updatedAnswers[currentIndex] = answer.trim(); // Trim spaces from selected answer
       setUserAnswers(updatedAnswers);
-
-      // Check if the answer is correct and update score
-      if (answer === question?.answer) {
+  
+      // Add quotes around the user's answer
+      const userAnswer = `"${answer.trim()}"`; 
+      const correctAnswer = typeof question?.answer === "string"
+        ? question?.answer.trim()
+        : String(question?.answer).trim();
+  
+      console.log("User Answer with quotes:", userAnswer);
+      console.log("Correct Answer:", correctAnswer);
+  
+      // Check if the user's answer (with quotes) matches the correct answer
+      if (userAnswer === correctAnswer) {
         setScore((prevScore) => prevScore + 1);
         setFeedback("Correct!");
       } else {
         setFeedback("Incorrect!");
       }
-
+  
       // Set the correct answer
-      setCorrectAnswer(question?.answer || "");
+      setCorrectAnswer(correctAnswer);
       setHasSubmittedAnswer(true); // Prevent further answering for the current question
     }
   };
+  
+  
+  
 
   const handleSubmit = async () => {
     try {
