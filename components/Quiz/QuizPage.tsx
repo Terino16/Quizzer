@@ -73,7 +73,7 @@ const QuizPage = ({ questions, quizId }: Props) => {
       console.log("Correct Answer:", correctAnswer);
   
       // Check if the user's answer (with quotes) matches the correct answer
-      if (userAnswer === correctAnswer) {
+      if (userAnswer === correctAnswer || answer.trim()===correctAnswer) {
         setScore((prevScore) => prevScore + 1);
         setFeedback("Correct!");
       } else {
