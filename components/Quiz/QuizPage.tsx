@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import axios from "axios"; // For API calls to store score
+import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
 import { JsonValue } from "@prisma/client/runtime/library";
 
@@ -32,8 +32,8 @@ const QuizPage = ({ questions, quizId }: Props) => {
   const [userAnswers, setUserAnswers] = useState<string[]>([]);
   const [score, setScore] = useState(0);
   const [feedback, setFeedback] = useState<string | null>(null);
-  const [correctAnswer, setCorrectAnswer] = useState<string | null>(null); // Track the correct answer
-  const [hasSubmittedAnswer, setHasSubmittedAnswer] = useState(false); // Prevent re-answering after submission
+  const [correctAnswer, setCorrectAnswer] = useState<string | null>(null); 
+  const [hasSubmittedAnswer, setHasSubmittedAnswer] = useState(false); 
   const [timeStarted, setTimeStarted] = useState<Date | null>(null);
   const router = useRouter();
   const { toast } = useToast();
@@ -41,15 +41,15 @@ const QuizPage = ({ questions, quizId }: Props) => {
   const question = questions ? questions[currentIndex] : null;
 
   useEffect(() => {
-    // Record the start time when the component mounts
+  
     const startTime = new Date();
     setTimeStarted(startTime);
   }, []);
 
   const handleNext = () => {
     setFeedback(null);
-    setCorrectAnswer(null); // Reset the correct answer
-    setHasSubmittedAnswer(false); // Allow answering the next question
+    setCorrectAnswer(null); 
+    setHasSubmittedAnswer(false); 
     if (currentIndex < (questions?.length || 0) - 1) {
       setCurrentIndex(currentIndex + 1);
     }
@@ -60,10 +60,9 @@ const QuizPage = ({ questions, quizId }: Props) => {
   const handleAnswerSelection = (answer: string) => {
     if (!hasSubmittedAnswer) {
       const updatedAnswers = [...userAnswers];
-      updatedAnswers[currentIndex] = answer.trim(); // Trim spaces from selected answer
+      updatedAnswers[currentIndex] = answer.trim(); 
       setUserAnswers(updatedAnswers);
   
-      // Add quotes around the user's answer
       const userAnswer = `"${answer.trim()}"`; 
       const correctAnswer = typeof question?.answer === "string"
         ? question?.answer.trim()
@@ -72,7 +71,6 @@ const QuizPage = ({ questions, quizId }: Props) => {
       console.log("User Answer with quotes:", userAnswer);
       console.log("Correct Answer:", correctAnswer);
   
-      // Check if the user's answer (with quotes) matches the correct answer
       if (userAnswer === correctAnswer || answer.trim()===correctAnswer) {
         setScore((prevScore) => prevScore + 1);
         setFeedback("Correct!");
@@ -80,9 +78,8 @@ const QuizPage = ({ questions, quizId }: Props) => {
         setFeedback("Incorrect!");
       }
   
-      // Set the correct answer
       setCorrectAnswer(correctAnswer);
-      setHasSubmittedAnswer(true); // Prevent further answering for the current question
+      setHasSubmittedAnswer(true); 
     }
   };
   
