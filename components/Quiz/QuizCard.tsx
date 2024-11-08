@@ -34,7 +34,7 @@ type Props = {
 const QuizCard = ({ quiz }: Props) => {
   return (
     <div className="h-screen p-8 pt-28  ">           
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {quiz.map((quiz) => (
           <Dialog key={quiz.id}>
             <DialogTrigger asChild>

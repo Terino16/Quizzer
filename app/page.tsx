@@ -1,5 +1,6 @@
-import { Badge } from "@/components/ui/badge";
+
 import { getAuthSession } from "@/lib/nextauth";
+
 import { redirect } from "next/navigation";
 export default async function Home() {
   const session = await getAuthSession();
@@ -22,7 +23,7 @@ export default async function Home() {
           Quizzy is a platform that helps you to prepare for NPTEL by taking
           quizzes on any topic.
         </p>
-        <Badge className=" bg-green-400 mt-3 p-1 ">SignIn to Start</Badge>
+       
       </div>
     </div>
   );
